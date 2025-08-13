@@ -15,9 +15,12 @@ const jobRoutes = require('./routes/jobs');
 const memeRoutes = require('./routes/memes');
 const analyticsRoutes = require('./routes/analytics');
 
-// Import middleware
-const { errorHandler } = require('./middleware/errorHandler');
-const { logger } = require('./utils/logger');
+// Simple console logger for Railway
+const logger = {
+  info: (message) => console.log(`[INFO] ${message}`),
+  error: (message) => console.error(`[ERROR] ${message}`),
+  warn: (message) => console.warn(`[WARN] ${message}`)
+};
 
 // Security middleware
 app.use(helmet({
@@ -60,7 +63,7 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(compression());
 
 // Logging middleware
-app.use(morgan('combined', { stream: { write: message => logger.info(message.trim()) } }));
+app.use(morgan('combined'));
 
 // Serve static files (for production)
 if (process.env.NODE_ENV === 'production') {
@@ -113,8 +116,14 @@ app.use('*', (req, res) => {
   });
 });
 
-// Error handling middleware
-app.use(errorHandler);
+// Simple error handler
+app.use((err, req, res, next) => {
+  logger.error(err.stack);
+  res.status(500).json({
+    error: 'Something went wrong!',
+    message: process.env.NODE_ENV === 'development' ? err.message : 'Internal server error'
+  });
+});
 
 // Start server
 app.listen(PORT, () => {
