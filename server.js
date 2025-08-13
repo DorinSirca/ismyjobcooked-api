@@ -22,6 +22,17 @@ const logger = {
   warn: (message) => console.warn(`[WARN] ${message}`)
 };
 
+// Global error handlers to prevent crashes
+process.on('unhandledRejection', (reason, promise) => {
+  logger.error('Unhandled Rejection at:', promise, 'reason:', reason);
+  // Don't exit the process, just log the error
+});
+
+process.on('uncaughtException', (error) => {
+  logger.error('Uncaught Exception:', error);
+  // Don't exit the process, just log the error
+});
+
 // Security middleware
 app.use(helmet({
   contentSecurityPolicy: {
