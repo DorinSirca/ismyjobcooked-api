@@ -1,4 +1,9 @@
-const { logger } = require('../utils/logger');
+// Simple console logger
+const logger = {
+  info: (message) => console.log(`[INFO] ${message}`),
+  error: (message) => console.error(`[ERROR] ${message}`),
+  warn: (message) => console.warn(`[WARN] ${message}`)
+};
 
 // Meme templates for different job categories and risk levels
 const memeTemplates = {

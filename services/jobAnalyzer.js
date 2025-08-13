@@ -1,5 +1,11 @@
 const OpenAI = require('openai');
-const { logger } = require('../utils/logger');
+
+// Simple console logger
+const logger = {
+  info: (message) => console.log(`[INFO] ${message}`),
+  error: (message) => console.error(`[ERROR] ${message}`),
+  warn: (message) => console.warn(`[WARN] ${message}`)
+};
 
 // Initialize OpenAI client
 const openai = new OpenAI({

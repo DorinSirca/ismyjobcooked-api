@@ -1,4 +1,11 @@
-const { ValidationError } = require('./errorHandler');
+// Custom error class for validation
+class ValidationError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = 'ValidationError';
+    this.statusCode = 400;
+  }
+}
 
 /**
  * Validate job title input
